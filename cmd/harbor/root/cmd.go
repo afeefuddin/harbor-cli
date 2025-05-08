@@ -106,6 +106,7 @@ harbor help
 		labels.Labels(),
 		InfoCommand(),
 		instance.Instance(),
+		AuditLogs(),
 	)
 
 	return root
