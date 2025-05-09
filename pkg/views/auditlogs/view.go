@@ -15,20 +15,22 @@ package auditlogs
 
 import (
 	"fmt"
-
+	"os"
 	"github.com/charmbracelet/bubbles/table"
+	tea "github.com/charmbracelet/bubbletea"
 	"github.com/goharbor/go-client/pkg/sdk/v2.0/client/auditlog"
+	"github.com/goharbor/harbor-cli/pkg/views/base/tablelist"
 )
 
 // PrintAuditLogs renders the audit logs in a table format
 func PrintAuditLogs(auditLogs *auditlog.ListAuditLogsOK) {
 	// Define table columns
 	columns := []table.Column{
-		{Title: "ID", Width: 10},
-		{Title: "Username", Width: 20},
-		{Title: "Resource", Width: 20},
-		{Title: "ResourceType", Width: 20},
-		{Title: "Operation", Width: 25},
+		{Title: "ID", Width: tablelist.WidthS},
+		{Title: "Username", Width: tablelist.WidthXXL},
+		{Title: "Resource", Width: tablelist.WidthXXL},
+		{Title: "ResourceType", Width: tablelist.WidthS},
+		{Title: "Operation", Width: tablelist.WidthS},
 	}
 
 	// Populate table rows with audit log data
@@ -44,12 +46,10 @@ func PrintAuditLogs(auditLogs *auditlog.ListAuditLogsOK) {
 	}
 
 	// Create table model
-	t := table.New(
-		table.WithColumns(columns),
-		table.WithRows(rows),
-		table.WithFocused(true),
-	)
-
+	m := tablelist.NewModel(columns, rows, len(rows))
 	// Render table
-	fmt.Println(t.View())
+	if _, err := tea.NewProgram(m).Run(); err != nil {
+		fmt.Println("Error running program:", err)
+		os.Exit(1)
+	}
 }

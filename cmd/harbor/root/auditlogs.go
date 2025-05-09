@@ -26,7 +26,7 @@ func AuditLogs() *cobra.Command {
 	var opts api.ListFlags
 
 	cmd := &cobra.Command{
-		Use:     "auditlog",
+		Use:     "auditlogs",
 		Short:   "list auditlogs",
 		Long:    `Manage audit logs in Harbor repository.`,
 		Args:  cobra.ExactArgs(0),
@@ -40,6 +40,7 @@ func AuditLogs() *cobra.Command {
 			if err != nil {
 				return fmt.Errorf("failed to get audit logs: %v", err)
 			}
+
 			auditlogs.PrintAuditLogs(auditLog)
 			return nil
 		},
